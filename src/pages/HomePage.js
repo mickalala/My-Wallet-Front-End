@@ -60,14 +60,14 @@ export default function HomePage() {
       <ButtonsContainer>
 
         <button>
-          <Link to={"/nova-transacao/:entrada"}>
+          <Link to={"/nova-transacao/:entrada"} tipo={"entrada"}>
             <AiOutlinePlusCircle />
             <p>Nova <br /> entrada</p>
           </Link>
         </button>
 
         <button>
-          <Link to={"/nova-transacao/:saida"}>
+          <Link to={"/nova-transacao/:saida"} tipo={"saida"}>
             <AiOutlineMinusCircle />
             <p>Nova <br />saída</p>
           </Link>

@@ -4,7 +4,7 @@ import axios from "axios"
 import UserContext from "../contexts/UserContext"
 import { useNavigate } from "react-router-dom"
 
-export default function TransactionsPage() {
+export default function TransactionsPage({tipo}) {
 
   const { userToken } = useContext(UserContext)
   const navigate = useNavigate()
@@ -16,7 +16,7 @@ export default function TransactionsPage() {
   }
   function sendForm(e) {
     e.preventDefault()
-    axios.post(`${process.env.REACT_APP_API_URL}/nova-transacao/:tipo`, form, {
+    axios.post(`${process.env.REACT_APP_API_URL}/nova-transacao/:${tipo}`, form, {
       headers: {
         'Authorization': `Bearer ${userToken}`
       }
