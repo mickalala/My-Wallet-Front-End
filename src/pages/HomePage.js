@@ -1,8 +1,16 @@
 import styled from "styled-components"
 import { BiExit } from "react-icons/bi"
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai"
+import axios from "axios"
+import { useEffect,useContext } from "react"
+import UserContext from "../contexts/UserContext"
 
 export default function HomePage() {
+  const { userToken } = useContext(UserContext)
+  // useEffect(()=>{
+
+  // },[])
+  console.log(userToken)
   return (
     <HomeContainer>
       <Header>
