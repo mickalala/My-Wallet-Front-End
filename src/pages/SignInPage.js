@@ -9,7 +9,6 @@ export default function SignInPage() {
   const navigate = useNavigate()
   const [form, setForm] = useState({ email: "", password: "" })
 
-
   const { setUserToken } = useContext(UserContext)
   function handleForm(e) {
     setForm({ ...form, [e.target.name]: e.target.value })
@@ -19,8 +18,8 @@ export default function SignInPage() {
     e.preventDefault()
     axios.post(`${process.env.REACT_APP_API_URL}/`, form).
       then((answer) => {
-        setUserToken(answer.data.token)
-        console.log(answer.data.token)
+        setUserToken(answer.data)
+        console.log(answer.data)
         console.log("deubom")
         navigate("/home")
       }

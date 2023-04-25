@@ -5,6 +5,8 @@ import SignInPage from "./pages/SignInPage"
 import SignUpPage from "./pages/SignUpPage"
 import TransactionsPage from "./pages/TransactionPage"
 
+import { useState } from "react"
+
 import UserContext from "./contexts/UserContext"
 
 export default function App() {

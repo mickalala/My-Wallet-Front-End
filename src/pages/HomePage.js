@@ -2,14 +2,25 @@ import styled from "styled-components"
 import { BiExit } from "react-icons/bi"
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai"
 import axios from "axios"
-import { useEffect,useContext } from "react"
+import { useEffect, useContext, useState } from "react"
 import UserContext from "../contexts/UserContext"
+import { Link, useNavigate } from "react-router-dom"
 
 export default function HomePage() {
   const { userToken } = useContext(UserContext)
-  // useEffect(()=>{
+  const [transactions, setTransactions] = useState([])
 
-  // },[])
+  useEffect(() => {
+    axios.get((`${process.env.REACT_APP_API_URL}/home`), {
+      headers: {
+        'Authorization': `Bearer ${userToken}`
+      }
+    }).then((ans) => {
+      console.log(ans.data)
+      setTransactions(ans.data)
+    }).catch(err => alert(err))
+  }, [])
+
   console.log(userToken)
   return (
     <HomeContainer>
@@ -20,21 +31,23 @@ export default function HomePage() {
 
       <TransactionsContainer>
         <ul>
-          <ListItemContainer>
-            <div>
-              <span>30/11</span>
-              <strong>Almoço mãe</strong>
-            </div>
-            <Value color={"negativo"}>120,00</Value>
-          </ListItemContainer>
-
-          <ListItemContainer>
+          {transactions === undefined && <p>Nada para ver ainda</p>}
+          {transactions.map((t) => (
+            <ListItemContainer>
+              <div>
+                <span>30/11</span>
+                <strong>{t.description}</strong>
+              </div>
+              <Value color={"negativo"}>{parseFloat(t.value)}</Value>
+            </ListItemContainer>))
+          }
+          {/* <ListItemContainer>
             <div>
               <span>15/11</span>
               <strong>Salário</strong>
             </div>
             <Value color={"positivo"}>3000,00</Value>
-          </ListItemContainer>
+          </ListItemContainer> */}
         </ul>
 
         <article>
@@ -45,14 +58,21 @@ export default function HomePage() {
 
 
       <ButtonsContainer>
+
         <button>
-          <AiOutlinePlusCircle />
-          <p>Nova <br /> entrada</p>
+          <Link to={"/nova-transacao/:entrada"}>
+            <AiOutlinePlusCircle />
+            <p>Nova <br /> entrada</p>
+          </Link>
         </button>
+
         <button>
-          <AiOutlineMinusCircle />
-          <p>Nova <br />saída</p>
+          <Link to={"/nova-transacao/:saida"}>
+            <AiOutlineMinusCircle />
+            <p>Nova <br />saída</p>
+          </Link>
         </button>
+
       </ButtonsContainer>
 
     </HomeContainer>
