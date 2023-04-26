@@ -4,19 +4,20 @@ import axios from "axios"
 import UserContext from "../contexts/UserContext"
 import { useNavigate } from "react-router-dom"
 
-export default function TransactionsPage({tipo}) {
+export default function TransactionsPage() {
 
-  const { userToken } = useContext(UserContext)
+  const { userToken,type, setType } = useContext(UserContext)
   const navigate = useNavigate()
 
-  const [form, setForm] = useState({ value: "", description: "" })
+  const [form, setForm] = useState({ value: "", description: "" , type:type })
+  console.log(form)
 
   function handleForm(e) {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
   function sendForm(e) {
     e.preventDefault()
-    axios.post(`${process.env.REACT_APP_API_URL}/nova-transacao/:${tipo}`, form, {
+    axios.post(`${process.env.REACT_APP_API_URL}/nova-transacao/${type}`, form, {
       headers: {
         'Authorization': `Bearer ${userToken}`
       }
@@ -24,6 +25,7 @@ export default function TransactionsPage({tipo}) {
       .then(() => {
         console.log("foiii")
         navigate("/home")
+        setType("")
       }
       ).catch(err => alert(err))
   }

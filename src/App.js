@@ -11,10 +11,11 @@ import UserContext from "./contexts/UserContext"
 
 export default function App() {
   const [userToken, setUserToken] = useState("")
+  const [type, setType]= useState("")
 
   return (
     <PagesContainer>
-      <UserContext.Provider value={{ userToken, setUserToken }}>
+      <UserContext.Provider value={{ userToken, setUserToken, type, setType }}>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<SignInPage />} />

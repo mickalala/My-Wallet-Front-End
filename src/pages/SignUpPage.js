@@ -8,7 +8,7 @@ export default function SignUpPage() {
   const navigate = useNavigate()
 
   const [form, setForm] = useState({ name: "", email: "", password: "" })
-  const [confirmPassword, setConfirmPassword]= useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
 
   function handleForm(e) {
     setForm({ ...form, [e.target.name]: e.target.value })
@@ -16,13 +16,14 @@ export default function SignUpPage() {
 
   function sendForm(e) {
     e.preventDefault()
-    axios.post(`${process.env.REACT_APP_API_URL}/cadastro`, form)
-      .then(() => {
-        console.log("deubom")
-        navigate("/")
-      }).catch(err => {
-        alert(err.response.data.message)
-      })
+      axios.post(`${process.env.REACT_APP_API_URL}/cadastro`, form)
+        .then(() => {
+          console.log("deubom")
+          navigate("/")
+        }).catch(err => {
+          alert(err.message)
+        })
+
   }
 
   return (
@@ -31,17 +32,18 @@ export default function SignUpPage() {
         <MyWalletLogo />
         <input placeholder="Nome" type={"name"}
           name="name"
-          value={form.name} onChange={handleForm} />
+          value={form.name} onChange={handleForm} required />
 
         <input placeholder="E-mail" type={"email"}
           name="email"
-          value={form.email} onChange={handleForm} />
+          value={form.email} onChange={handleForm} required />
 
         <input placeholder="Senha" type={"password"}
           name="password"
-          value={form.password} onChange={handleForm} autoComplete="new-password" />
+          value={form.password} onChange={handleForm} autoComplete="new-password" required />
 
-        <input placeholder="Confirme a senha" type="password" autoComplete="new-password" />
+        <input placeholder="Confirme a senha" value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)} autoComplete="new-password" required />
 
         <button onClick={sendForm}>Cadastrar</button>
       </form>

@@ -7,8 +7,9 @@ import UserContext from "../contexts/UserContext"
 import { Link, useNavigate } from "react-router-dom"
 
 export default function HomePage() {
-  const { userToken } = useContext(UserContext)
+  const { userToken, setType } = useContext(UserContext)
   const [transactions, setTransactions] = useState([])
+  const [values, setValues] = useState(0)
 
   useEffect(() => {
     axios.get((`${process.env.REACT_APP_API_URL}/home`), {
@@ -21,7 +22,18 @@ export default function HomePage() {
     }).catch(err => alert(err))
   }, [])
 
-  console.log(userToken)
+  useEffect(() => { 
+    let total = 0;
+    transactions.map(t => {
+      if (t.type === ":entrada") {
+        total += parseInt(t.value)
+      } else if (t.type === ":saida") {
+        total = total - parseFloat(t.value)
+      } 
+    });
+    setValues(total)
+  }
+  )
   return (
     <HomeContainer>
       <Header>
@@ -31,43 +43,37 @@ export default function HomePage() {
 
       <TransactionsContainer>
         <ul>
-          {transactions === undefined && <p>Nada para ver ainda</p>}
+          {transactions.length === 0 && <p>Nada para ver ainda</p>}
           {transactions.map((t) => (
-            <ListItemContainer>
+            <ListItemContainer key={t._id}>
               <div>
                 <span>30/11</span>
                 <strong>{t.description}</strong>
               </div>
-              <Value color={"negativo"}>{parseFloat(t.value)}</Value>
+              <Value color={(t.type === ":saida") ? "negativo" : "positivo"}>{t.value}</Value>
             </ListItemContainer>))
           }
-          {/* <ListItemContainer>
-            <div>
-              <span>15/11</span>
-              <strong>Salário</strong>
-            </div>
-            <Value color={"positivo"}>3000,00</Value>
-          </ListItemContainer> */}
+
         </ul>
 
         <article>
           <strong>Saldo</strong>
-          <Value color={"positivo"}>2880,00</Value>
+          <Value color={(values>0)?"positivo":"negativo"}>{values}</Value>
         </article>
       </TransactionsContainer>
 
 
       <ButtonsContainer>
 
-        <button>
-          <Link to={"/nova-transacao/:entrada"} tipo={"entrada"}>
+        <button onClick={() => setType(":entrada")}>
+          <Link to={"/nova-transacao/:entrada"}>
             <AiOutlinePlusCircle />
             <p>Nova <br /> entrada</p>
           </Link>
         </button>
 
-        <button>
-          <Link to={"/nova-transacao/:saida"} tipo={"saida"}>
+        <button onClick={() => setType(":saida")}>
+          <Link to={"/nova-transacao/:saida"} >
             <AiOutlineMinusCircle />
             <p>Nova <br />saída</p>
           </Link>
